@@ -31,25 +31,31 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
 
   //  eg - /filteredimage?image_url=https://i.picsum.photos/id/43/200/300.jpg
-  app.get("/filteredimage", async(req, res) => {
-    var imageUrl = req.query.image_url;
+  app.get("/filteredimage", async(request, response) => {
+    var imageUrl = request.query.image_url;
 
     if(!imageUrl)
     {
-      return res.status(400)
+      return response.status(400)
         .send(`image_url is required`)
     }
 
-    var filteredpath = await filterImageFromURL(imageUrl);
+    try {
+      var filteredpath = await filterImageFromURL(imageUrl);
 
-    res.sendFile(filteredpath);
+      response.sendFile(filteredpath);
+      response.statusCode = 200;
 
-    res.on('finish', async function(){
-      console.log('finished');
-      var images = [filteredpath];
-      await deleteLocalFiles(images);
-    });
-    
+      response.on('finish', async function(){
+        console.log('finished');
+        var images = [filteredpath];
+        await deleteLocalFiles(images);
+      });
+
+    } catch (error) {
+      response.send("We are unable to process the request!") 
+      response.statusCode = 500;
+    }  
   })
 
   //! END @TODO1
