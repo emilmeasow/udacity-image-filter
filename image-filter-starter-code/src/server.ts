@@ -43,8 +43,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     try {
       var filteredpath = await filterImageFromURL(imageUrl);
 
-      response.sendFile(filteredpath);
-      response.statusCode = 200;
+      response.status(200).sendFile(filteredpath);
 
       response.on('finish', async function(){
         console.log('finished');
@@ -53,8 +52,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       });
 
     } catch (error) {
-      response.send("We are unable to process the request!") 
-      response.statusCode = 500;
+      response.status(500).send("We are unable to process the request!")
     }  
   })
 
