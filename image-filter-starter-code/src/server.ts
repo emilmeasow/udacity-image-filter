@@ -31,7 +31,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
 
   //  eg - /filteredimage?image_url=https://i.picsum.photos/id/43/200/300.jpg
-  app.get("/filteredimage", async(request, response) => {
+  app.get("/filteredimage", async(request: express.Request, response: express.Response) => {
     var imageUrl = request.query.image_url;
 
     if(!imageUrl)
